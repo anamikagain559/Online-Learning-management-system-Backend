@@ -70,10 +70,10 @@ const updateTravelPlan = catchAsync(async (req, res) => {
 });
 
 const deleteTravelPlan = catchAsync(async (req, res) => {
-await TravelPlanServices.deleteTravelPlan(
-  req.params.id,
-  req.user as JwtPayload & { userId: string; role: string }
-);
+  await TravelPlanServices.deleteTravelPlan(
+    req.params.id,
+    req.user as JwtPayload & { userId: string; role: string }
+  );
 
   sendResponse(res, {
     success: true,
@@ -89,6 +89,8 @@ const matchTravelPlans = catchAsync(async (req: Request, res: Response) => {
     startDate: req.query.startDate?.toString(),
     endDate: req.query.endDate?.toString(),
     travelType: req.query.travelType?.toString(),
+    minBudget: req.query.minBudget?.toString(),
+    maxBudget: req.query.maxBudget?.toString(),
   };
 
   // Call service method

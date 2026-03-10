@@ -4,8 +4,10 @@ import { UserRoutes } from "../modules/user/user.route"
 
 import { reviewsRoutes } from "../modules/reviews/reviews.route"
 import { TravelPlanRoutes } from "../modules/travelPlan/travelPlan.route";
-import {paymentsRoutes} from "../modules/payments/payment.route";
+import { paymentsRoutes } from "../modules/payments/payment.route";
 import { OtpRoutes } from "../modules/otp/otp.route"
+import { MessageRoutes } from "../modules/message/message.route";
+import { BuddyRequestRoutes } from "../modules/buddyRequest/buddyRequest.route";
 export const router = Router()
 
 const moduleRoutes = [
@@ -18,8 +20,8 @@ const moduleRoutes = [
         route: AuthRoutes
     },
     {
-         path: "/travel-plans",
-        route: TravelPlanRoutes 
+        path: "/travel-plans",
+        route: TravelPlanRoutes
     }, {
         path: "/otp",
         route: OtpRoutes
@@ -29,9 +31,17 @@ const moduleRoutes = [
         path: "/payments",
         route: paymentsRoutes
     },
-        {
+    {
         path: "/reviews",
         route: reviewsRoutes
+    },
+    {
+        path: "/messages",
+        route: MessageRoutes
+    },
+    {
+        path: "/buddy-requests",
+        route: BuddyRequestRoutes
     },
 ]
 
