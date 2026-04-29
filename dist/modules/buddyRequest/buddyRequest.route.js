@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BuddyRequestRoutes = void 0;
+const express_1 = require("express");
+const checkAuth_1 = require("../middlewares/checkAuth");
+const user_interface_1 = require("../user/user.interface");
+const buddyRequest_controller_1 = require("./buddyRequest.controller");
+const router = (0, express_1.Router)();
+router.post('/', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), buddyRequest_controller_1.BuddyRequestControllers.sendBuddyRequest);
+router.get('/trip/:tripId', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), buddyRequest_controller_1.BuddyRequestControllers.getRequestsForTrip);
+router.patch('/:requestId/respond', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), buddyRequest_controller_1.BuddyRequestControllers.respondToRequest);
+router.get('/buddies/:tripId', buddyRequest_controller_1.BuddyRequestControllers.getPlanBuddies);
+router.get('/all', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), buddyRequest_controller_1.BuddyRequestControllers.getAllBuddyRequests);
+router.delete('/:requestId', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), buddyRequest_controller_1.BuddyRequestControllers.deleteBuddyRequest);
+exports.BuddyRequestRoutes = router;

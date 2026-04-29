@@ -70,6 +70,8 @@ const matchTravelPlans = (0, catchAsync_1.catchAsync)(async (req, res) => {
         startDate: req.query.startDate?.toString(),
         endDate: req.query.endDate?.toString(),
         travelType: req.query.travelType?.toString(),
+        minBudget: req.query.minBudget?.toString(),
+        maxBudget: req.query.maxBudget?.toString(),
     };
     // Call service method
     const result = await travelPlan_service_1.TravelPlanServices.matchTravelPlans(query, req.user // make sure req.user is populated by your auth middleware

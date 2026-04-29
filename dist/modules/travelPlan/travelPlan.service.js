@@ -56,36 +56,53 @@ const deleteTravelPlan = async (id, decodedToken // make sure role is included
     return null;
 };
 const matchTravelPlans = async (query, decoded) => {
-    const { destination, startDate, endDate, travelType } = query;
-    const filter = {
-        isActive: true,
-        user: { $ne: decoded.userId }, // exclude own plans
+    const { destination, startDate, endDate, travelType, minBudget, maxBudget } = query;
+    const baseFilter = {
+        $or: [{ isActive: true }, { isActive: { $exists: false } }],
+        // user: { $ne: decoded.userId }, // 🛠 Temporarily allowed for testing visibility
     };
-    const andConditions = [filter];
-    // Match destination city or country
-    if (destination) {
-        andConditions.push({
+    const orConditions = [];
+    // Match destination city or country (OR)
+    if (destination && destination.trim() !== "") {
+        const words = destination.trim().split(/\s+/).filter((w) => w.length > 0);
+        const searchPattern = words.join('|'); // Matches any of the words
+        orConditions.push({
             $or: [
-                { "destination.city": { $regex: destination, $options: "i" } },
-                { "destination.country": { $regex: destination, $options: "i" } },
+                { "destination.city": { $regex: searchPattern, $options: "i" } },
+                { "destination.country": { $regex: searchPattern, $options: "i" } },
             ],
         });
     }
-    // Match date overlap
-    if (startDate && endDate) {
-        andConditions.push({
+    // Match date overlap (OR)
+    if (startDate && endDate && startDate !== "" && endDate !== "") {
+        orConditions.push({
             startDate: { $lte: new Date(endDate) },
             endDate: { $gte: new Date(startDate) },
         });
     }
-    // Match travel type
-    if (travelType) {
-        andConditions.push({
+    // Match travel type (OR)
+    if (travelType && travelType !== "" && travelType !== "ALL") {
+        orConditions.push({
             travelType: travelType.toUpperCase(),
         });
     }
-    console.log("FINAL MATCH FILTER 👉", { $and: andConditions });
-    return travelPlan_model_1.TravelPlan.find({ $and: andConditions })
+    // Match Budget Range (OR)
+    if (minBudget && minBudget !== "") {
+        orConditions.push({
+            "budgetRange.min": { $gte: Number(minBudget) },
+        });
+    }
+    if (maxBudget && maxBudget !== "") {
+        orConditions.push({
+            "budgetRange.max": { $lte: Number(maxBudget) },
+        });
+    }
+    // Final Query: Base Filter (AND) (OR Conditions)
+    const finalQuery = orConditions.length > 0
+        ? { $and: [baseFilter, { $or: orConditions }] }
+        : baseFilter;
+    console.log("FINAL BROAD MATCH FILTER 👉", JSON.stringify(finalQuery, null, 2));
+    return travelPlan_model_1.TravelPlan.find(finalQuery)
         .populate("user", "name email picture bio")
         .sort({ startDate: 1 });
 };
