@@ -3,11 +3,12 @@ import { AuthRoutes } from "../modules/auth/auth.route"
 import { UserRoutes } from "../modules/user/user.route"
 
 import { reviewsRoutes } from "../modules/reviews/reviews.route"
-import { TravelPlanRoutes } from "../modules/travelPlan/travelPlan.route";
+import { CourseRoutes } from "../modules/course/course.route";
 import { paymentsRoutes } from "../modules/payments/payment.route";
 import { OtpRoutes } from "../modules/otp/otp.route"
 import { MessageRoutes } from "../modules/message/message.route";
-import { BuddyRequestRoutes } from "../modules/buddyRequest/buddyRequest.route";
+import { EnrollmentRoutes } from "../modules/enrollment/enrollment.route";
+import { CategoryRoutes } from "../modules/category/category.route";
 export const router = Router()
 
 const moduleRoutes = [
@@ -20,8 +21,12 @@ const moduleRoutes = [
         route: AuthRoutes
     },
     {
-        path: "/travel-plans",
-        route: TravelPlanRoutes
+        path: "/categories",
+        route: CategoryRoutes
+    },
+    {
+        path: "/courses",
+        route: CourseRoutes
     }, {
         path: "/otp",
         route: OtpRoutes
@@ -40,8 +45,8 @@ const moduleRoutes = [
         route: MessageRoutes
     },
     {
-        path: "/buddy-requests",
-        route: BuddyRequestRoutes
+        path: "/enrollments",
+        route: EnrollmentRoutes
     },
 ]
 

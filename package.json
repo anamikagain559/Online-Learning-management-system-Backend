@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
+    "seed": "npx ts-node src/scripts/seedFullData.ts",
     "lint": "npx eslint ./src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

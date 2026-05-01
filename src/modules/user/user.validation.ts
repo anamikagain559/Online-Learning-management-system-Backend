@@ -8,13 +8,14 @@ export const createUserZodSchema = z.object({
     .regex(/^(?=.*[A-Z])/, "Must contain uppercase")
     .regex(/^(?=.*[!@#$%^&*])/, "Must contain special char")
     .regex(/^(?=.*\d)/, "Must contain number"),
-  phone: z.string().regex(/^(?:\+8801\d{9}|01\d{9})$/).optional(),
+  phone: z.string().optional(),
   address: z.string().max(200).optional(),
   bio: z.string().max(500).optional(),
   travelInterests: z.array(z.string()).optional(),
   visitedCountries: z.array(z.string()).optional(),
   currentLocation: z.string().optional(),
-  picture: z.string().url().optional(), // ✅ added profile image field
+  picture: z.string().optional(), 
+  role: z.enum(Object.values(Role) as [string]).optional(),
 });
 
 export const updateUserZodSchema = z.object({
@@ -24,7 +25,7 @@ export const updateUserZodSchema = z.object({
         .regex(/^(?=.*[!@#$%^&*])/, "Must contain special char")
         .regex(/^(?=.*\d)/, "Must contain number")
         .optional(),
-    phone: z.string().regex(/^(?:\+8801\d{9}|01\d{9})$/).optional(),
+    phone: z.string().optional(),
     role: z.enum(Object.values(Role) as [string]).optional(),
     isActive: z.enum(Object.values(IsActive) as [string]).optional(),
     isDeleted: z.boolean().optional(),

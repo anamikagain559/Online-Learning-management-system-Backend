@@ -2,6 +2,8 @@ import { Types } from "mongoose";
 
 export enum Role {
     ADMIN = "ADMIN",
+    STUDENT = "STUDENT",
+    INSTRUCTOR = "INSTRUCTOR",
     USER = "USER",
 }
 
@@ -24,17 +26,14 @@ export interface IUser {
     email: string;
     password?: string;
     phone?: string;
-    picture?: string;                // Profile picture
-    bio?: string;                    // Bio/About
-    travelInterests?: string[];      // e.g., ["hiking", "photography"]
-    visitedCountries?: string[];     // e.g., ["Bangladesh", "India"]
-    currentLocation?: string;        // e.g., "Dhaka, Bangladesh"
+    picture?: string;
+    bio?: string;
+    travelInterests?: string[];
     address?: string;
     isDeleted?: boolean;
     isActive?: IsActive;
     isVerified?: boolean;
     role: Role;
     auths: IAuthProvider[];
-    bookings?: Types.ObjectId[];
-    guides?: Types.ObjectId[];
+
 }

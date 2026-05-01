@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkAuth } from "../middlewares/checkAuth";
+import { checkAuth } from "../../modules/middlewares/checkAuth";
 import { Role } from "../user/user.interface";
 import { PaymentControllers } from "../payments/payments.controller";
 
@@ -7,15 +7,20 @@ const router = Router();
 
 router.post(
   "/create-intent",
-  checkAuth(Role.USER, Role.ADMIN),
+  checkAuth(Role.STUDENT, Role.ADMIN, Role.USER),
   PaymentControllers.createPaymentIntent
 );
 
-// router.get(
-//   "/me",
-//   checkAuth(Role.USER, Role.ADMIN),
-//   paymentController.getMyPayments
-// );
+router.post(
+  "/create-course-intent",
+  checkAuth(Role.STUDENT, Role.ADMIN, Role.USER),
+  PaymentControllers.createCoursePaymentIntent
+);
 
-// ✅ EXPORT THIS
+router.post(
+  "/confirm-enrollment",
+  checkAuth(Role.STUDENT, Role.ADMIN, Role.USER),
+  PaymentControllers.confirmCourseEnrollment
+);
+
 export const paymentsRoutes = router;

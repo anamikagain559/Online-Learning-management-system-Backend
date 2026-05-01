@@ -49,6 +49,10 @@ const getAllUsers = async () => {
     return { data: users, meta: { total: totalUsers } };
 };
 
+const getInstructors = async () => {
+    return await User.find({ role: Role.INSTRUCTOR }).select("name email picture");
+};
+
 const getMe = async (userId: string) => {
     const user = await User.findById(userId).select("-password");
     return { data: user };
@@ -74,4 +78,4 @@ const updateMyProfile = async (userId: string, payload: Partial<IUser>) => {
 
 
 
-export const UserServices = { createUser, updateUser, getAllUsers, getMe,updateMyProfile };
+export const UserServices = { createUser, updateUser, getAllUsers, getInstructors, getMe, updateMyProfile };

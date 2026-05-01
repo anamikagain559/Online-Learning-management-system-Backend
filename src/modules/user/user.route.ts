@@ -19,24 +19,29 @@ router.post(
 // Logged-in user profile
 router.get(
   "/me",
-  checkAuth(...Object.values(Role)),
+  checkAuth(Role.ADMIN, Role.STUDENT, Role.INSTRUCTOR, Role.USER),
   UserControllers.getMe
 );
 
-// 🔥 MUST be before "/:id"
+// Update profile
 router.patch(
   "/update-my-profile",
-  checkAuth(...Object.values(Role)),
+  checkAuth(Role.ADMIN, Role.STUDENT, Role.INSTRUCTOR, Role.USER),
   validateRequest(updateUserZodSchema),
   UserControllers.updateMyProfile
 );
 
 /* ================= ADMIN ROUTES ================= */
 
+router.get(
+  "/instructors",
+  UserControllers.getInstructors
+);
+
 // Get all users (ADMIN only)
 router.get(
   "/all-users",
-  checkAuth(Role.ADMIN,Role.USER),
+  checkAuth(Role.ADMIN, Role.STUDENT, Role.INSTRUCTOR, Role.USER),
   UserControllers.getAllUsers
 );
 
@@ -47,12 +52,19 @@ router.patch(
   UserControllers.blockOrUnblockUser
 );
 
-// Update any user by ID (ADMIN only)
+// Update any user by ID
 router.patch(
   "/:id",
-  checkAuth(...Object.values(Role)),
+  checkAuth(Role.ADMIN, Role.STUDENT, Role.INSTRUCTOR, Role.USER),
   validateRequest(updateUserZodSchema),
   UserControllers.updateUser
 );
-router.get("/:id", checkAuth(Role.USER, Role.ADMIN), UserControllers.getUserById);
+
+// Get user by ID
+router.get(
+  "/:id", 
+  checkAuth(Role.ADMIN, Role.STUDENT, Role.INSTRUCTOR, Role.USER), 
+  UserControllers.getUserById
+);
+
 export const UserRoutes = router;

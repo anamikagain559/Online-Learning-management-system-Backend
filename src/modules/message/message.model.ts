@@ -12,9 +12,9 @@ const messageSchema = new Schema<IMessage>(
             type: Schema.Types.ObjectId,
             ref: 'User',
         },
-        tripId: {
+        courseId: {
             type: Schema.Types.ObjectId,
-            ref: 'TravelPlan',
+            ref: 'Course',
         },
         message: {
             type: String,

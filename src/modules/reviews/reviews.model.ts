@@ -12,9 +12,9 @@ const reviewSchema = new Schema(
       ref: "User",
       required: true,
     },
-    travelPlan: {
+    course: {
       type: Types.ObjectId,
-      ref: "TravelPlan",
+      ref: "Course",
       required: true,
     },
     rating: {
@@ -32,7 +32,7 @@ const reviewSchema = new Schema(
 );
 
 reviewSchema.index(
-  { reviewer: 1, travelPlan: 1 },
+  { reviewer: 1, course: 1 },
   { unique: true }
 );
 

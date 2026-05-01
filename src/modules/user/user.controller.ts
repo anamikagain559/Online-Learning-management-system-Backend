@@ -85,6 +85,17 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
         meta: result.meta
     });
 });
+
+const getInstructors = catchAsync(async (req: Request, res: Response) => {
+    const result = await UserServices.getInstructors();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Instructors Retrieved Successfully",
+        data: result
+    });
+});
 const getMe = catchAsync(async (req: Request, res: Response) => {
     const decodedToken = req.user as JwtPayload
     const result = await UserServices.getMe(decodedToken.userId);
@@ -197,10 +208,9 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
 export const UserControllers = {
     createUser,
     getAllUsers,
+    getInstructors,
     updateUser,
     getMe,getUserById,
    updateMyProfile,
     blockOrUnblockUser,
- 
-
 }

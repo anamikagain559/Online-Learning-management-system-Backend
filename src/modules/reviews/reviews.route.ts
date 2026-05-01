@@ -16,11 +16,11 @@ router.post(
 );
 
 /**
- * Get all reviews for a travel plan (public)
+ * Get all reviews for a course (public)
  */
 router.get(
-  "/travel-plan/:travelPlanId",
-  ReviewControllers.getReviewsByTravelPlan
+  "/course/:courseId",
+  ReviewControllers.getReviewsByCourse
 );
 
 /**

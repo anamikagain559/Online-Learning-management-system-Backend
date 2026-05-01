@@ -5,7 +5,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import AppError from "../../errorHelpers/AppError";
 import { Review } from "./reviews.model";
-import { TravelPlan } from "../travelPlan/travelPlan.model";
+import { Course } from "../course/course.model";
 
 /**
  * CREATE REVIEW
@@ -13,10 +13,10 @@ import { TravelPlan } from "../travelPlan/travelPlan.model";
  */
 const createReview = catchAsync(async (req: Request, res: Response) => {
   const decodedToken = req.user as JwtPayload;
-  const { travelPlan, rating, comment } = req.body;
+  const { course, rating, comment } = req.body;
 
-  if (!travelPlan) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Travel plan ID is required");
+  if (!course) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Course ID is required");
   }
 
   if (!rating || rating < 1 || rating > 5) {
@@ -26,38 +26,38 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
     );
   }
 
-  // 🔐 Find travel plan to get owner (reviewee)
-  const plan = await TravelPlan.findById(travelPlan).select("user");
+  // 🔐 Find course to get owner (instructor)
+  const plan = await Course.findById(course).select("user");
 
   if (!plan) {
-    throw new AppError(httpStatus.NOT_FOUND, "Travel plan not found");
+    throw new AppError(httpStatus.NOT_FOUND, "Course not found");
   }
 
-  // ❌ Prevent reviewing own plan
+  // ❌ Prevent reviewing own course
   if (plan.user.toString() === decodedToken.userId) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You cannot review your own travel plan"
+      "You cannot review your own course"
     );
   }
 
   // ❌ Prevent duplicate review
   const alreadyReviewed = await Review.findOne({
-    travelPlan,
+    course,
     reviewer: decodedToken.userId,
   });
 
   if (alreadyReviewed) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      "You have already reviewed this travel plan"
+      "You have already reviewed this course"
     );
   }
 
   const review = await Review.create({
     reviewer: decodedToken.userId, // logged-in user
-    reviewee: plan.user,           // ✅ REQUIRED FIELD
-    travelPlan,
+    reviewee: plan.user,           // instructor
+    course,
     rating,
     comment,
   });
@@ -71,17 +71,17 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 });
 
 /**
- * GET REVIEWS BY TRAVEL PLAN
+ * GET REVIEWS BY COURSE
  * Public endpoint
  */
-const getReviewsByTravelPlan = catchAsync(async (req: Request, res: Response) => {
-  const { travelPlanId } = req.params;
+const getReviewsByCourse = catchAsync(async (req: Request, res: Response) => {
+  const { courseId } = req.params;
 
-  if (!travelPlanId) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Travel plan ID is required");
+  if (!courseId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Course ID is required");
   }
 
-  const reviews = await Review.find({ travelPlan: travelPlanId })
+  const reviews = await Review.find({ course: courseId })
     .populate("reviewer", "name email")
     .sort({ createdAt: -1 });
 
@@ -150,7 +150,7 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
 
 export const ReviewControllers = {
   createReview,
-  getReviewsByTravelPlan,
+  getReviewsByCourse,
   updateReview,
   deleteReview,
 };
