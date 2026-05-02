@@ -5,11 +5,12 @@ const express_1 = require("express");
 const auth_route_1 = require("../modules/auth/auth.route");
 const user_route_1 = require("../modules/user/user.route");
 const reviews_route_1 = require("../modules/reviews/reviews.route");
-const travelPlan_route_1 = require("../modules/travelPlan/travelPlan.route");
+const course_route_1 = require("../modules/course/course.route");
 const payment_route_1 = require("../modules/payments/payment.route");
 const otp_route_1 = require("../modules/otp/otp.route");
 const message_route_1 = require("../modules/message/message.route");
-const buddyRequest_route_1 = require("../modules/buddyRequest/buddyRequest.route");
+const enrollment_route_1 = require("../modules/enrollment/enrollment.route");
+const category_route_1 = require("../modules/category/category.route");
 exports.router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -21,8 +22,12 @@ const moduleRoutes = [
         route: auth_route_1.AuthRoutes
     },
     {
-        path: "/travel-plans",
-        route: travelPlan_route_1.TravelPlanRoutes
+        path: "/categories",
+        route: category_route_1.CategoryRoutes
+    },
+    {
+        path: "/courses",
+        route: course_route_1.CourseRoutes
     }, {
         path: "/otp",
         route: otp_route_1.OtpRoutes
@@ -40,8 +45,8 @@ const moduleRoutes = [
         route: message_route_1.MessageRoutes
     },
     {
-        path: "/buddy-requests",
-        route: buddyRequest_route_1.BuddyRequestRoutes
+        path: "/enrollments",
+        route: enrollment_route_1.EnrollmentRoutes
     },
 ];
 moduleRoutes.forEach((route) => {

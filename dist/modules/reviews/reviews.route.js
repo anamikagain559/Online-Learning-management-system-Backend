@@ -12,9 +12,9 @@ const router = (0, express_1.Router)();
  */
 router.post("/", (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), reviews_controller_1.ReviewControllers.createReview);
 /**
- * Get all reviews for a travel plan (public)
+ * Get all reviews for a course (public)
  */
-router.get("/travel-plan/:travelPlanId", reviews_controller_1.ReviewControllers.getReviewsByTravelPlan);
+router.get("/course/:courseId", reviews_controller_1.ReviewControllers.getReviewsByCourse);
 /**
  * Update own review
  */

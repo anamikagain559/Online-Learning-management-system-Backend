@@ -13,13 +13,14 @@ exports.createUserZodSchema = zod_1.default.object({
         .regex(/^(?=.*[A-Z])/, "Must contain uppercase")
         .regex(/^(?=.*[!@#$%^&*])/, "Must contain special char")
         .regex(/^(?=.*\d)/, "Must contain number"),
-    phone: zod_1.default.string().regex(/^(?:\+8801\d{9}|01\d{9})$/).optional(),
+    phone: zod_1.default.string().optional(),
     address: zod_1.default.string().max(200).optional(),
     bio: zod_1.default.string().max(500).optional(),
     travelInterests: zod_1.default.array(zod_1.default.string()).optional(),
     visitedCountries: zod_1.default.array(zod_1.default.string()).optional(),
     currentLocation: zod_1.default.string().optional(),
-    picture: zod_1.default.string().url().optional(), // ✅ added profile image field
+    picture: zod_1.default.string().optional(),
+    role: zod_1.default.enum(Object.values(user_interface_1.Role)).optional(),
 });
 exports.updateUserZodSchema = zod_1.default.object({
     name: zod_1.default.string().min(2).max(50).optional(),
@@ -28,7 +29,7 @@ exports.updateUserZodSchema = zod_1.default.object({
         .regex(/^(?=.*[!@#$%^&*])/, "Must contain special char")
         .regex(/^(?=.*\d)/, "Must contain number")
         .optional(),
-    phone: zod_1.default.string().regex(/^(?:\+8801\d{9}|01\d{9})$/).optional(),
+    phone: zod_1.default.string().optional(),
     role: zod_1.default.enum(Object.values(user_interface_1.Role)).optional(),
     isActive: zod_1.default.enum(Object.values(user_interface_1.IsActive)).optional(),
     isDeleted: zod_1.default.boolean().optional(),

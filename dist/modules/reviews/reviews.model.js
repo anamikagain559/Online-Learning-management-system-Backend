@@ -13,9 +13,9 @@ const reviewSchema = new mongoose_1.Schema({
         ref: "User",
         required: true,
     },
-    travelPlan: {
+    course: {
         type: mongoose_1.Types.ObjectId,
-        ref: "TravelPlan",
+        ref: "Course",
         required: true,
     },
     rating: {
@@ -29,5 +29,5 @@ const reviewSchema = new mongoose_1.Schema({
         trim: true,
     },
 }, { timestamps: true });
-reviewSchema.index({ reviewer: 1, travelPlan: 1 }, { unique: true });
+reviewSchema.index({ reviewer: 1, course: 1 }, { unique: true });
 exports.Review = (0, mongoose_1.model)("Review", reviewSchema);

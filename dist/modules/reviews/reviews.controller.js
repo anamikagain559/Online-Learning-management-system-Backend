@@ -9,41 +9,41 @@ const catchAsync_1 = require("../../utils/catchAsync");
 const sendResponse_1 = require("../../utils/sendResponse");
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
 const reviews_model_1 = require("./reviews.model");
-const travelPlan_model_1 = require("../travelPlan/travelPlan.model");
+const course_model_1 = require("../course/course.model");
 /**
  * CREATE REVIEW
  * Only logged-in users can create a review for a travel plan
  */
 const createReview = (0, catchAsync_1.catchAsync)(async (req, res) => {
     const decodedToken = req.user;
-    const { travelPlan, rating, comment } = req.body;
-    if (!travelPlan) {
-        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Travel plan ID is required");
+    const { course, rating, comment } = req.body;
+    if (!course) {
+        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Course ID is required");
     }
     if (!rating || rating < 1 || rating > 5) {
         throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Rating must be between 1 and 5");
     }
-    // 🔐 Find travel plan to get owner (reviewee)
-    const plan = await travelPlan_model_1.TravelPlan.findById(travelPlan).select("user");
+    // 🔐 Find course to get owner (instructor)
+    const plan = await course_model_1.Course.findById(course).select("user");
     if (!plan) {
-        throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Travel plan not found");
+        throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Course not found");
     }
-    // ❌ Prevent reviewing own plan
+    // ❌ Prevent reviewing own course
     if (plan.user.toString() === decodedToken.userId) {
-        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "You cannot review your own travel plan");
+        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "You cannot review your own course");
     }
     // ❌ Prevent duplicate review
     const alreadyReviewed = await reviews_model_1.Review.findOne({
-        travelPlan,
+        course,
         reviewer: decodedToken.userId,
     });
     if (alreadyReviewed) {
-        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "You have already reviewed this travel plan");
+        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "You have already reviewed this course");
     }
     const review = await reviews_model_1.Review.create({
         reviewer: decodedToken.userId, // logged-in user
-        reviewee: plan.user, // ✅ REQUIRED FIELD
-        travelPlan,
+        reviewee: plan.user, // instructor
+        course,
         rating,
         comment,
     });
@@ -55,15 +55,15 @@ const createReview = (0, catchAsync_1.catchAsync)(async (req, res) => {
     });
 });
 /**
- * GET REVIEWS BY TRAVEL PLAN
+ * GET REVIEWS BY COURSE
  * Public endpoint
  */
-const getReviewsByTravelPlan = (0, catchAsync_1.catchAsync)(async (req, res) => {
-    const { travelPlanId } = req.params;
-    if (!travelPlanId) {
-        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Travel plan ID is required");
+const getReviewsByCourse = (0, catchAsync_1.catchAsync)(async (req, res) => {
+    const { courseId } = req.params;
+    if (!courseId) {
+        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Course ID is required");
     }
-    const reviews = await reviews_model_1.Review.find({ travelPlan: travelPlanId })
+    const reviews = await reviews_model_1.Review.find({ course: courseId })
         .populate("reviewer", "name email")
         .sort({ createdAt: -1 });
     (0, sendResponse_1.sendResponse)(res, {
@@ -112,7 +112,7 @@ const deleteReview = (0, catchAsync_1.catchAsync)(async (req, res) => {
 });
 exports.ReviewControllers = {
     createReview,
-    getReviewsByTravelPlan,
+    getReviewsByCourse,
     updateReview,
     deleteReview,
 };

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EnrollmentRoutes = void 0;
+const express_1 = require("express");
+const checkAuth_1 = require("../middlewares/checkAuth");
+const user_interface_1 = require("../user/user.interface");
+const enrollment_controller_1 = require("./enrollment.controller");
+const router = (0, express_1.Router)();
+router.post('/', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), enrollment_controller_1.EnrollmentControllers.sendEnrollmentRequest);
+router.get('/course/:courseId', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), enrollment_controller_1.EnrollmentControllers.getEnrollmentsForCourse);
+router.patch('/:enrollmentId/respond', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER, user_interface_1.Role.ADMIN), enrollment_controller_1.EnrollmentControllers.respondToEnrollment);
+router.get('/students/:courseId', enrollment_controller_1.EnrollmentControllers.getCourseStudents);
+router.get('/all', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), enrollment_controller_1.EnrollmentControllers.getAllEnrollments);
+router.delete('/:enrollmentId', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), enrollment_controller_1.EnrollmentControllers.deleteEnrollment);
+exports.EnrollmentRoutes = router;

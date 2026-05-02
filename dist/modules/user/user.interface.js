@@ -4,6 +4,8 @@ exports.IsActive = exports.Role = void 0;
 var Role;
 (function (Role) {
     Role["ADMIN"] = "ADMIN";
+    Role["STUDENT"] = "STUDENT";
+    Role["INSTRUCTOR"] = "INSTRUCTOR";
     Role["USER"] = "USER";
 })(Role || (exports.Role = Role = {}));
 var IsActive;

@@ -12,9 +12,9 @@ const messageSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
     },
-    tripId: {
+    courseId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'TravelPlan',
+        ref: 'Course',
     },
     message: {
         type: String,

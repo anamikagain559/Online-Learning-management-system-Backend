@@ -46,6 +46,9 @@ const getAllUsers = async () => {
     const totalUsers = await user_model_1.User.countDocuments();
     return { data: users, meta: { total: totalUsers } };
 };
+const getInstructors = async () => {
+    return await user_model_1.User.find({ role: user_interface_1.Role.INSTRUCTOR }).select("name email picture");
+};
 const getMe = async (userId) => {
     const user = await user_model_1.User.findById(userId).select("-password");
     return { data: user };
@@ -62,4 +65,4 @@ const updateMyProfile = async (userId, payload) => {
     const updatedUser = await user_model_1.User.findByIdAndUpdate(userId, { $set: payload }, { new: true, runValidators: true }).select("-password");
     return updatedUser;
 };
-exports.UserServices = { createUser, updateUser, getAllUsers, getMe, updateMyProfile };
+exports.UserServices = { createUser, updateUser, getAllUsers, getInstructors, getMe, updateMyProfile };

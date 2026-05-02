@@ -27,7 +27,9 @@ const checkAuth = (...authRoles) => async (req, res, next) => {
         if (isUserExist.isDeleted) {
             throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "User is deleted");
         }
-        if (!authRoles.includes(verifiedToken.role)) {
+        const userRole = verifiedToken.role?.toUpperCase();
+        const allowedRoles = authRoles.map(role => role.toUpperCase());
+        if (!allowedRoles.includes(userRole)) {
             throw new AppError_1.default(403, "You are not permitted to view this route!!!");
         }
         req.user = verifiedToken;

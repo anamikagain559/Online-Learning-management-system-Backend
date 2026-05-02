@@ -13,16 +13,16 @@ const app = express()
 
 
 app.use(expressSession({
-    secret: envVars.EXPRESS_SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
+  secret: envVars.EXPRESS_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(cookieParser())
 app.use(express.json())
 const allowedOrigins = [
-  "https://digital-wallet-frontend-rho.vercel.app",
+  "https://online-learning-management-system-f.vercel.app",
   "http://localhost:3000",
 ];
 
@@ -45,9 +45,9 @@ app.use(
 app.use("/api/v1", router)
 
 app.get("/", (req: Request, res: Response) => {
-    res.status(200).json({
-        message: "Welcome to Tour Management System Backend"
-    })
+  res.status(200).json({
+    message: "Welcome to Tour Management System Backend"
+  })
 })
 
 

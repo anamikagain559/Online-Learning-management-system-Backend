@@ -71,6 +71,15 @@ const getAllUsers = (0, catchAsync_1.catchAsync)(async (req, res) => {
         meta: result.meta
     });
 });
+const getInstructors = (0, catchAsync_1.catchAsync)(async (req, res) => {
+    const result = await user_service_1.UserServices.getInstructors();
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        statusCode: http_status_codes_1.default.OK,
+        message: "Instructors Retrieved Successfully",
+        data: result
+    });
+});
 const getMe = (0, catchAsync_1.catchAsync)(async (req, res) => {
     const decodedToken = req.user;
     const result = await user_service_1.UserServices.getMe(decodedToken.userId);
@@ -165,6 +174,7 @@ const getUserById = (0, catchAsync_1.catchAsync)(async (req, res) => {
 exports.UserControllers = {
     createUser,
     getAllUsers,
+    getInstructors,
     updateUser,
     getMe, getUserById,
     updateMyProfile,
